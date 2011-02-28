@@ -1,6 +1,6 @@
 === DirtySuds - Postlist ===
 Contributors: pathawks
-Donate link: http://www.pathawks.com
+Donate link: http://www.pathawks.com/p/wordpress-plugins.html
 Tags: plugins, wordpress, shortcode, homepage
 Requires at least: 3.0
 Tested up to: 3.1
