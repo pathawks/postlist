@@ -1,5 +1,5 @@
-=== DirtySuds - Postlist ===
-Contributors: pathawks
+=== Postlist Shortcode ===
+Contributors: dirtysuds,pathawks
 Donate link: http://www.pathawks.com/p/wordpress-plugins.html
 Tags: plugins, wordpress, shortcode, homepage
 Requires at least: 3.0
@@ -10,7 +10,7 @@ Adds shortcode `[postlist]` for embedding a list of posts into a page
 
 == Description ==
 
-Add the shortcode `[postlist query="_PostQuery_"]` to a page to enable an unordered list of links to posts matching the query.
+Add the shortcode `[postlist query="PostQuery"]` to a page to enable an unordered list of links to posts matching the query.
 Useful for designing custom homepages.
 
 == Installation ==
