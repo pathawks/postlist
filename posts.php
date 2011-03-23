@@ -8,6 +8,7 @@ Version: 1.00.20110226
 Author URI: http://www.pathawks.com
 
 Updates:
+1.01 20110323 - Expanded everything
 1.00.20110226 - First Version
 
   Copyright 2011 Pat Hawks  (email : pat@pathawks.com)
@@ -27,53 +28,77 @@ Updates:
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// [postlist query="Post query"]
+// [postlist cat="7" showposts="5"]
 
-function dirtysuds_postlist( $atts ) {
-	extract( shortcode_atts( array(
-		'query' => '',
-		'id' => '',
-		'title' => '',
-		'notcat' => '',
-	), $atts ) );
-	
-	$embed = '';
-	if ($notcat) {
-		$defaults = array(
-			'numberposts' => 5, 'offset' => 0,
-			'category' => 0, 'orderby' => 'post_date',
-			'order' => 'DESC', 'include' => array(),
-			'exclude' => array(), 'meta_key' => '',
-			'meta_value' =>'', 'post_type' => 'post',
-			'suppress_filters' => true
-		);
-		$query = wp_parse_args( $query, $defaults );
-		$query = array_merge( $query, array( 'category__not_in' => explode(',',$notcat) ) );
-query_posts( $args );
-	}
-	
-	$posts = get_posts($query);
-	
-	if ($title){
-		$embed .= '<h2>'.$title.'</h2>';
-	}
+// The shortcode should be able to take almost any argument that WP_Query understands
+// For a full list, see http://codex.wordpress.org/Function_Reference/WP_Query#Parameters
 
-	if ($posts):
-		$embed .= '<ul';
-		if ($id)
-			$embed .= ' id="'.$id.'"';
-		$embed .= '>';
-		foreach( $posts as $post ) : setup_postdata($post);
-			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
-		endforeach;
-		$embed .=  '</ul>';
-	endif;
-	
-	if ($notcat) {
-		wp_reset_query();
-	}
-	
-	return $embed;
-}
 
 add_shortcode( 'postlist', 'dirtysuds_postlist' );
+
+function dirtysuds_postlist( $atts ) {
+
+// First, let's lay out some default query parameters
+	$defaults = array(
+		'showposts' => 5,
+		'offset' => 0,
+		'orderby' => 'post_date',
+		'order' => 'DESC',
+		'include' => array(),
+		'exclude' => array(),
+		'meta_key' => '',
+		'meta_value' =>'',
+		'post_type' => 'post',
+	);
+
+
+// Let's use the array of shortcode attributes as an array of arguments for WP_Query
+	$query = $atts;
+// That's some WTF code
+
+
+// If the shortcode included the argument "query" let's parse that first, then merge it with our query defaults
+	if ($atts['query']) {
+		$query = wp_parse_args( $atts['query'], $query );
+	}
+
+
+// Finally, run the query
+	$posts = get_posts($query);
+
+
+// Now, to prepare the embeded text to return
+	$embed = '';
+
+	if ($posts) {
+		$embed .= '<ul';
+		if ($atts['id'])
+			$embed .= ' id="'.$atts['id'].'"';
+		$embed .= '>';
+		foreach( $posts as $post ):
+		setup_postdata($post);
+			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
+		endforeach;
+		
+		
+// If a category has been set, and a "morelink" parameter specified, display a link to that category
+		
+		if ($query['cat'] && $atts['morelink']) {
+			$embed .= '<li><a href="'.get_category_link($query['cat']).'">'.$atts['morelink'].'</a></li>';
+		}
+
+	
+// If a tag has been set, and a "morelink" parameter specified, display a link to that category
+
+		if ($query['tag'] && $atts['morelink']) {
+			$embed .= '<li><a href="'.get_category_link($query['tag']).'">'.$atts['morelink'].'</a></li>';
+		}
+		
+		
+		$embed .=  '</ul>';
+	} else {
+		$embed = '<!-- No matching posts found -->';
+	}
+
+	return $embed;
+}
