@@ -3,7 +3,7 @@
 Plugin Name: DirtySuds - Postlist
 Plugin URI: http://dirtysuds.com
 Description: Adds shortcode to embed a list of posts
-Author: Pat Hawks
+Author: DirtySuds,PatHawks,jrevillini
 Version: 1.01
 Author URI: http://www.pathawks.com
 

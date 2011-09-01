@@ -1,5 +1,5 @@
 === Postlist Shortcode ===
-Contributors: dirtysuds,pathawks
+Contributors: dirtysuds,pathawks,jrevillini
 Donate link: http://www.pathawks.com/p/wordpress-plugins.html
 Tags: plugins, wordpress, shortcode, homepage
 Requires at least: 3.0
