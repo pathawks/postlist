@@ -1,6 +1,6 @@
 === Postlist Shortcode ===
-Contributors: dirtysuds,pathawks,jrevillini
-Donate link: http://www.pathawks.com/p/wordpress-plugins.html
+Contributors: pathawks,jrevillini,dirtysuds
+Donate link: https://github.com/pathawks/postlist
 Tags: plugins, wordpress, shortcode, homepage
 Requires at least: 3.0
 Tested up to: 3.1

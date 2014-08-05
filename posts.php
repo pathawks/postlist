@@ -1,18 +1,14 @@
 <?php
 /*
-Plugin Name: DirtySuds - Postlist
-Plugin URI: http://dirtysuds.com
+Plugin Name: Postlist shortcode
+Plugin URI: https://github.com/pathawks/postlist
 Description: Adds shortcode to embed a list of posts
-Author: Dirty Suds
-Version: 1.01
-Author URI: http://blog.dirtysuds.com
+Author: Pat Hawks
+Author URI: http://pathawks.com
 License: GPL2
+Version: 1.01
 
-Updates:
-1.01 20110323 - Expanded everything
-1.00 20110226 - First Version
-
-  Copyright 2011 Pat Hawks  (email : pat@pathawks.com)
+  Copyright 2014 Pat Hawks  (email : pat@pathawks.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,22 +76,22 @@ function dirtysuds_postlist( $atts ) {
 		setup_postdata($post);
 			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
 		endforeach;
-		
-		
+
+
 // If a category has been set, and a "morelink" parameter specified, display a link to that category
-		
+
 		if ($query['cat'] && $atts['morelink']) {
 			$embed .= '<li><a href="'.get_category_link($query['cat']).'">'.$atts['morelink'].'</a></li>';
 		}
 
-	
+
 // If a tag has been set, and a "morelink" parameter specified, display a link to that category
 
 		if ($query['tag'] && $atts['morelink']) {
 			$embed .= '<li><a href="'.get_category_link($query['tag']).'">'.$atts['morelink'].'</a></li>';
 		}
-		
-		
+
+
 		$embed .=  '</ul>';
 	} else {
 		$embed = '<!-- No matching posts found -->';
