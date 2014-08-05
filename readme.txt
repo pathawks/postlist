@@ -4,7 +4,7 @@ Donate link: https://github.com/pathawks/postlist
 Tags: plugins, wordpress, shortcode, homepage
 Requires at least: 3.0
 Tested up to: 3.9.1
-Stable tag: 1.00
+Stable tag: trunk
 
 Adds shortcode `[postlist]` for embedding a list of posts into a page
 
