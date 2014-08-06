@@ -2,6 +2,8 @@
 Contributors: pathawks,jrevillini,dirtysuds
 Donate link: https://github.com/pathawks/postlist
 Tags: plugins, wordpress, shortcode, homepage
+License: GPLv2
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.0
 Tested up to: 3.9.1
 Stable tag: trunk
