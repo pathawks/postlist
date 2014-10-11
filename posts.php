@@ -58,7 +58,7 @@ function dirtysuds_postlist( $atts ) {
 
 
 // If the shortcode included the argument "query" let's parse that first, then merge it with our query defaults
-	if ($atts['query']) {
+	if ( in_array( 'query', $atts ) ) {
 		$query = wp_parse_args( $atts['query'], $query );
 	}
 
@@ -72,7 +72,7 @@ function dirtysuds_postlist( $atts ) {
 
 	if ($posts) {
 		$embed .= '<ul';
-		if ($atts['id'])
+		if ( in_array( 'id', $atts ) )
 			$embed .= ' id="'.$atts['id'].'"';
 		$embed .= '>';
 		foreach( $posts as $post ):
@@ -82,14 +82,14 @@ function dirtysuds_postlist( $atts ) {
 
 // If a category has been set, and a "morelink" parameter specified, display a link to that category
 
-		if ($query['cat'] && $atts['morelink']) {
+		if ( in_array( 'cat', $atts ) && in_array( 'morelink', $atts ) ) {
 			$embed .= '<li><a href="'.get_category_link($query['cat']).'">'.$atts['morelink'].'</a></li>';
 		}
 
 
 // If a tag has been set, and a "morelink" parameter specified, display a link to that category
 
-		if ($query['tag'] && $atts['morelink']) {
+		if ( in_array( 'tag', $atts ) && in_array( 'morelink', $atts ) ) {
 			$embed .= '<li><a href="'.get_category_link($query['tag']).'">'.$atts['morelink'].'</a></li>';
 		}
 
