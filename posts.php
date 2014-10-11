@@ -74,8 +74,7 @@ function dirtysuds_postlist( $atts ) {
 			$embed .= ' id="'.$atts['id'].'"';
 		$embed .= '>';
 		foreach( $posts as $post ):
-		setup_postdata($post);
-			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
+			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></li>';
 		endforeach;
 
 
