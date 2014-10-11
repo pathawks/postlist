@@ -4,9 +4,9 @@ Donate link: https://github.com/pathawks/postlist
 Tags: plugins, wordpress, shortcode, homepage
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 3.0
-Tested up to: 3.9.1
-Stable tag: trunk
+Requires at least: 3.5
+Tested up to: 4.0
+Stable tag: 1.02
 
 Adds shortcode `[postlist]` for embedding a list of posts into a page
 
@@ -26,11 +26,13 @@ Useful for designing custom homepages.
 
 = I have an idea for a great way to improve this plugin =
 
-Great! I'd love to hear from you.
-postlist@pathawks.com
+Please open a pull request on [Github](https://github.com/pathawks/postlist)
 
 
 == Changelog ==
+
+= 1.02 20141011 =
+* Make use of transients
 
 = 1.00.20110226 =
 * First version
