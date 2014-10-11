@@ -35,6 +35,8 @@ Version: 1.01
 add_shortcode( 'postlist', 'dirtysuds_postlist' );
 
 function dirtysuds_postlist( $atts ) {
+	$embed = get_transient( 'dirtysuds_postlist' . implode($atts) );
+	if( $embed ) return $embed;
 
 // First, let's lay out some default query parameters
 	$defaults = array(
@@ -96,6 +98,8 @@ function dirtysuds_postlist( $atts ) {
 	} else {
 		$embed = '<!-- No matching posts found -->';
 	}
+
+	set_transient( 'dirtysuds_postlist' . implode($atts), $embed, 5 * MINUTE_IN_SECONDS );
 
 	return $embed;
 }
