@@ -29,77 +29,165 @@ Updates:
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// [postlist cat="7" showposts="5"]
-
-// The shortcode should be able to take almost any argument that WP_Query understands
-// For a full list, see http://codex.wordpress.org/Function_Reference/WP_Query#Parameters
+/**
+* USAGE
+*
+* Insert shortcode into post. Optionally, you can alter the output by
+* specifying attributes and values.
+*
+*
+*
+**
+* EXAMPLES
+*
+* 1. To insert a postlist using all default options, include this in the
+* post:
+*
+* [postlist]
+*
+* ---
+*
+* 2. To insert a postlist for category 7 and only show 5 posts, include
+*
+* [postlist cat="7" showposts="5"]
+*
+*
+*
+**
+* CONFIGURATION
+* The shortcode should be able to take almost any argument that WP_Query understands
+* For a full list, see http://codex.wordpress.org/Function_Reference/WP_Query#Parameters
+*
+*
+*/
 
 
 add_shortcode( 'postlist', 'dirtysuds_postlist' );
 
-function dirtysuds_postlist( $atts ) {
+function dirtysuds_postlist( $atts, $template=NULL ) {
 
 // First, let's lay out some default query parameters
 	$defaults = array(
-		'showposts' => 5,
-		'offset' => 0,
-		'orderby' => 'post_date',
-		'order' => 'DESC',
-		'include' => array(),
-		'exclude' => array(),
-		'meta_key' => '',
-		'meta_value' =>'',
-		'post_type' => 'post',
+		'date_format'		=> get_option('date_format'),
+		'morelink'		=> NULL,
 	);
 
 
-// Let's use the array of shortcode attributes as an array of arguments for WP_Query
-	$query = $atts;
-// That's some WTF code
-
-
 // If the shortcode included the argument "query" let's parse that first, then merge it with our query defaults
-	if ($atts['query']) {
+
+	$atts = wp_parse_args( $atts, $defaults );
+
+	if (isset($atts['query'])) {
 		$query = wp_parse_args( $atts['query'], $query );
+	} else {
+		$query = $atts;
 	}
 
+	unset(
+		$query['date_format']
+	);
 
 // Finally, run the query
 	$posts = get_posts($query);
 
+// If there aren't any posts, there's no sense in going any further
+	if (!isset($posts[0]))
+		return '<!-- No matching posts found -->';
 
-// Now, to prepare the embeded text to return
-	$embed = '';
 
-	if ($posts) {
-		$embed .= '<ul';
-		if ($atts['id'])
-			$embed .= ' id="'.$atts['id'].'"';
-		$embed .= '>';
-		foreach( $posts as $post ):
-		setup_postdata($post);
-			$embed .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
-		endforeach;
-		
-		
-// If a category has been set, and a "morelink" parameter specified, display a link to that category
-		
-		if ($query['cat'] && $atts['morelink']) {
-			$embed .= '<li><a href="'.get_category_link($query['cat']).'">'.$atts['morelink'].'</a></li>';
+// Setup Template
+
+	$before = '<ul>';
+	$after = '</ul>';
+	$itemtemplate = '<li><a href="{LINK}">{TITLE}</a></li>';
+	$morelink = '';
+
+	// tokens to replace in the item & morelink template
+	$searchTokens = array (
+		'{LINK}',
+		'{TITLE}',
+		'{DATE}'
+	);
+
+	if (strlen($template)) {
+
+		// Because WordPress gives us filtered HTML in the content, we have to strip out a bunch of garbage
+
+		$template =
+			explode( "\n" ,
+				trim(
+					str_replace(
+						array( "<br />\n" , '</p>' , '<p>' ),
+						"\n",
+						$template
+					)
+				)
+			);
+		switch (count($template)) {
+			case 1:
+				list($itemtemplate) = $template;
+				break;
+			case 2:
+				list($itemtemplate,$morelink) = $template;
+				break;
+			case 3:
+				list($before,$itemtemplate,$after) = $template;
+				break;
+			case 4:
+				list($before,$itemtemplate,$morelink,$after) = $template;
+				break;
 		}
-
-	
-// If a tag has been set, and a "morelink" parameter specified, display a link to that category
-
-		if ($query['tag'] && $atts['morelink']) {
-			$embed .= '<li><a href="'.get_category_link($query['tag']).'">'.$atts['morelink'].'</a></li>';
-		}
-		
-		
-		$embed .=  '</ul>';
-	} else {
-		$embed = '<!-- No matching posts found -->';
 	}
 
-	return $embed;
+	// the items
+	$items = array();
+	foreach( $posts as $post ):
+		$items[] = str_replace(
+			$searchTokens,
+			array(
+				get_permalink($post->ID),
+				$post->post_title,
+				date($atts['date_format'],strtotime($post->post_date)),
+			),
+			$itemtemplate
+		);
+	endforeach;
+
+
+
+// If a category has been set, and a "morelink" parameter specified, display a link to that category
+
+	if (isset($query['cat'],$morelink)) {
+		$morelink = str_replace(
+			$searchTokens,
+			array(
+				get_category_link($query['cat']),
+				$atts['morelink'],
+				null
+			),
+			$morelink
+		);
+	}
+
+
+// If a tag has been set, and a "morelink" parameter specified, display a link to that category
+
+	if (isset($query['tag'],$morelink)) {
+		$morelink = str_replace(
+			$searchTokens,
+			array(
+				get_category_link($query['tag']),
+				$atts['morelink'],
+				null
+			),
+			$morelink
+		);
+	}
+
+		// Because we are very responsible Plugin Authors,
+		// we sanatize all content with wp_kses before
+		// returning any HTML
+
+	global $allowedposttags;
+	return wp_kses( $before . implode('', $items ) . $morelink . $after, $allowedposttags ,array('http','https') );
 }
