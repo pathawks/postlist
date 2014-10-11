@@ -18,7 +18,7 @@ Useful for designing custom homepages.
 == Installation ==
 
 1. Upload 'dirtysuds-postlist' to the '/wp-content/plugins/' directory
-2. Activate **DirtySuds - Postlist** through the 'Plugins' menu in WordPress
+2. Activate **Postlist shortcode** through the 'Plugins' menu in WordPress
 3. In the page editor, add the shortcode `[postlist query="_PostQuery_"]` where _PostQuery_ is a query that Wordpress understands, like _cat=3_ to find all posts from Category 3.
 
 
