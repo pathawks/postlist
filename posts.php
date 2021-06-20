@@ -38,6 +38,13 @@ add_shortcode( 'postlist', 'dirtysuds_postlist' );
 function dirtysuds_postlist( $atts ) {
 	global $wpdb;
 
+	if ( !is_array( $atts ) ) {
+		if ( empty( $atts ) ) {
+			$atts = array();
+		} else {
+			$atts = array( $atts );
+		}
+	}
 
 	$embed = get_transient( 'dirtysuds_postlist' . implode($atts) );
 	if( $embed ) return $embed;
