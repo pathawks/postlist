@@ -5,8 +5,8 @@ Tags: plugins, wordpress, shortcode, homepage
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.03
+Tested up to: 5.0.12
+Stable tag: 1.04
 
 Adds shortcode `[postlist]` for embedding a list of posts into a page
 
@@ -30,6 +30,9 @@ Please open a pull request on [Github](https://github.com/pathawks/postlist)
 
 
 == Changelog ==
+
+= 1.04 20210620 =
+* Fixed warnings with PHP7.
 
 = 1.03 20141011 =
 * Bugfix
